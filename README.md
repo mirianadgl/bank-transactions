@@ -1,4 +1,4 @@
-# bank-transactions
+# bank-transactions 🏦
 
 This project is an API to manage and consult bank transactions.
 
@@ -32,18 +32,18 @@ reset state data before starting testes
 
 ### GET /balance
 
-Returns the current account balance
-`GET /balance?account_id= {id}`
+Returns the current account balance  
+`GET /balance?account_id={id}`
 
 ### POST /event
 
 Create an event account
 
-Event deposit
+Event deposit  
 `POST /event {"type":"deposit", "destination":"300", "amount":10}`
 
-Event withdraw
+Event withdraw  
 `POST /event {"type":"withdraw", "origin":"300", "amount":5}`
 
-Event transfer
+Event transfer  
 `POST /event {"type":"transfer", "origin":"100", "amount":5, "destination":"300"}`
