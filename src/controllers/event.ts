@@ -45,14 +45,14 @@ export function event(req:Request, res: Response) {
     }
 
     if(type === "withdraw") {
-        if(!destinationAccount) { //Withdraw from non-existing account (404)
+        if(!originAccount) { //Withdraw from non-existing account (404)
             console.log("saque sem conta");
             return res.status(404).json(0);
         } else { //Withdraw from existing account (201)
             console.log("saque com conta")
-            destinationAccount.balance -= amount;
+            originAccount.balance -= amount;
             fs.writeFileSync(path.join(process.cwd(), 'data/data.json'),JSON.stringify(data, null, 2),"utf-8");
-            return res.status(201).json({destination: { id: destination, balance: destinationAccount.balance}});
+            return res.status(201).json({origin: { id: origin, balance: originAccount.balance}});
         }
     }
 
