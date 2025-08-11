@@ -1,0 +1,23 @@
+meta {
+  name: Event
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/event
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "type":"deposit", 
+    "destination":"100", 
+    "amount":10
+  }
+}
+
+settings {
+  encodeUrl: true
+}

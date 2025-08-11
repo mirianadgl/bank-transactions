@@ -1,0 +1,19 @@
+meta {
+  name: Balance
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:3000/balance?account_id=200
+  body: json
+  auth: inherit
+}
+
+params:query {
+  account_id: 200
+}
+
+settings {
+  encodeUrl: true
+}
