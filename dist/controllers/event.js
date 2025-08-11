@@ -10,20 +10,19 @@ function event(req, res) {
     const { type, destination, origin, amount } = req.body;
     const data = JSON.parse(fs_1.default.readFileSync(path_1.default.join(process.cwd(), 'data/data.json'), "utf-8"));
     const destinationAccount = data.account.find((value) => value.id === destination);
-    //const originAccount
+    const originAccount = data.account.find((value) => value.id === origin);
     console.log(data, "rota /event");
     console.log(req.body);
     if (type === "deposit" && destination) {
-        console.log(destinationAccount);
         if (!destinationAccount) { //Create account with inicial balance (201)
-            console.log("náo tem conta:", destination, destinationAccount);
+            console.log("náo tem conta pra deposito:", destination, destinationAccount);
             data.account.push({
                 id: destination,
                 balance: amount
             });
         }
         else { //Deposit into existing account (201)
-            console.log("tem conta sim", destination, destinationAccount);
+            console.log("tem conta sim pra deposito", destination, destinationAccount);
             destinationAccount.balance += amount;
         }
         fs_1.default.writeFileSync(path_1.default.join(process.cwd(), 'data/data.json'), JSON.stringify(data, null, 2), "utf-8");
@@ -31,9 +30,27 @@ function event(req, res) {
     }
     if (type === "withdraw") {
         if (!destinationAccount) {
+            console.log("saque sem conta");
             return res.status(404).json(0);
         }
         else {
+            console.log("saque com conta");
+            destinationAccount.balance -= amount;
+            fs_1.default.writeFileSync(path_1.default.join(process.cwd(), 'data/data.json'), JSON.stringify(data, null, 2), "utf-8");
+            return res.status(201).json({ destination: { id: destination, balance: destinationAccount.balance } });
+        }
+    }
+    if (type === "transfer") {
+        if (!destinationAccount || !originAccount) {
+            console.log("transferencia sem conta");
+            return res.status(404).json(0);
+        }
+        else {
+            console.log("transferencia com conta");
+            originAccount.balance -= amount;
+            destinationAccount.balance += amount;
+            fs_1.default.writeFileSync(path_1.default.join(process.cwd(), 'data/data.json'), JSON.stringify(data, null, 2), "utf-8");
+            return res.status(201).json({ origin: { id: origin, balance: originAccount.balance }, destination: { id: destination, balance: destinationAccount.balance } });
         }
     }
 }
